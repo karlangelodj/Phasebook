@@ -36,14 +36,6 @@ def search_users(args):
             matching_users.append(user)
         elif search_occupation is not None and search_occupation.lower() in user['occupation'].lower():
             matching_users.append(user)
-
-    # Sort matching users based on priority: id > name > age > occupation
-    matching_users.sort(key=lambda user: (
-        user['id'] == search_id,
-        user['name'].lower() == search_name.lower(),
-        abs(user['age'] - int(search_age)) <= 1 if search_age else False,
-        user['occupation'].lower() == search_occupation.lower()
-    ), reverse=True)
-
+            
     return matching_users
 
