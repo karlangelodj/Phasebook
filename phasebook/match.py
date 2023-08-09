@@ -3,9 +3,7 @@ from flask import Blueprint
 
 from .data.match_data import MATCHES
 
-
 bp = Blueprint("match", __name__, url_prefix="/match")
-
 
 @bp.route("<int:match_id>")
 def match(match_id):
@@ -18,11 +16,9 @@ def match(match_id):
 
     return {"message": msg, "elapsedTime": end - start}, 200
 
-
 def is_match(fave_numbers_1, fave_numbers_2):
     fave_numbers_1_set = set(fave_numbers_1)
     for num in fave_numbers_2:
         if num not in fave_numbers_1_set:
             return False
     return True
-
