@@ -2,29 +2,48 @@ from flask import Blueprint, request
 
 from .data.search_data import USERS
 
-
 bp = Blueprint("search", __name__, url_prefix="/search")
-
 
 @bp.route("")
 def search():
     return search_users(request.args.to_dict()), 200
 
-
 def search_users(args):
-    """Search users database
+    """Search users database and sort based on priority
 
     Parameters:
-        args: a dictionary containing the following search parameters:
-            id: string
-            name: string
-            age: string
-            occupation: string
+        args: a dictionary containing the search parameters
 
     Returns:
-        a list of users that match the search parameters
+        a sorted list of users that match the search parameters
     """
 
-    # Implement search here!
+    # Extract search parameters from the args dictionary
+    search_id = args.get('id')
+    search_name = args.get('name')
+    search_age = args.get('age')
+    search_occupation = args.get('occupation')
 
-    return USERS
+    # Initialize a list to store matching users
+    matching_users = []
+
+    for user in USERS:
+        if search_id is not None and user['id'] == search_id:
+            matching_users.append(user)
+        elif search_name is not None and search_name.lower() in user['name'].lower():
+            matching_users.append(user)
+        elif search_age is not None and abs(user['age'] - int(search_age)) <= 1:
+            matching_users.append(user)
+        elif search_occupation is not None and search_occupation.lower() in user['occupation'].lower():
+            matching_users.append(user)
+
+    # Sort matching users based on priority: id > name > age > occupation
+    matching_users.sort(key=lambda user: (
+        user['id'] == search_id,
+        user['name'].lower() == search_name.lower(),
+        abs(user['age'] - int(search_age)) <= 1 if search_age else False,
+        user['occupation'].lower() == search_occupation.lower()
+    ), reverse=True)
+
+    return matching_users
+

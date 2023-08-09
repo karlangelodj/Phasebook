@@ -20,8 +20,9 @@ def match(match_id):
 
 
 def is_match(fave_numbers_1, fave_numbers_2):
-    for number in fave_numbers_2:
-        if number not in fave_numbers_1:
+    fave_numbers_1_set = set(fave_numbers_1)
+    for num in fave_numbers_2:
+        if num not in fave_numbers_1_set:
             return False
-
     return True
+
